@@ -115,7 +115,9 @@ module Wice
         temp_filename = temp_filename.strip
         filename = (grid.csv_file_name || grid.name ) + '.csv'
         grid.csv_tempfile.close
-        send_file_rails2 temp_filename, :filename => filename, :type => 'text/csv; charset=utf-8'
+        #send_file_rails2 temp_filename, :filename => filename, :type => 'text/csv; charset=iso-8859-1'
+        t = File.read(filename)
+        send_data t.encode("iso-8859-1", :invalid => :replace, :undef => :replace, :replace => ""),  :type => 'text/csv; charset=iso-8859-1;',  :disposition => "attachment; filename=export.csv"
         grid.csv_tempfile = nil
         true
       else
